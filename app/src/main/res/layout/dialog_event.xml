@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:scrollingCache="true">
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_10" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_large">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/spacing_large"
+                android:paddingTop="@dimen/spacing_large"
+                android:weightSum="100">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:src="@drawable/liberar_ensayo"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="25dp">
+                    <TextView
+                        android:id="@+id/text_course"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Mateámtica"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/grey_90"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_marginVertical="0dp"
+                        android:id="@+id/text_quiz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ensayo 1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/grey_90"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_marginVertical="0dp"
+                        android:id="@+id/text_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Paes"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/grey_90"
+                        android:textStyle="bold" />
+
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_middle"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/title_dialog_release_quiz"
+                        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
+                        android:textColor="@color/grey_90"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/subtitle_dialog_release_quiz"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:textColor="@color/grey_90" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_large" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_xsmall"
+                    android:text="Fecha y hora de inicio"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/grey_90" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <EditText
+                        android:id="@+id/spn_from_date"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/spacing_xxlarge"
+                        android:layout_weight="2"
+                        android:drawableEnd="@drawable/ic_event_grey"
+                        android:drawableRight="@drawable/ic_event_grey"
+                        android:focusable="false"
+                        android:theme="@style/EditText.Grey"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:hint=""
+                       />
+
+                    <View
+                        android:layout_width="@dimen/spacing_large"
+                        android:layout_height="0dp" />
+                    <EditText
+                        android:id="@+id/spn_from_time"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/spacing_xxlarge"
+                        android:layout_weight="1.5"
+                        android:drawableEnd="@drawable/clock_regular"
+                        android:drawableRight="@drawable/clock_regular"
+                        android:focusable="false"
+                        android:theme="@style/EditText.Grey"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:hint=""
+                        />
+
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_large" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_xsmall"
+                    android:text="Fecha y hora de término"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/grey_90" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/spn_to_date"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/spacing_xxlarge"
+                        android:layout_weight="2"
+                        android:drawableEnd="@drawable/ic_event_grey"
+                        android:drawableRight="@drawable/ic_event_grey"
+                        android:focusable="false"
+                        android:theme="@style/EditText.Grey"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:hint=""
+                        />
+
+                    <View
+                        android:layout_width="@dimen/spacing_large"
+                        android:layout_height="0dp" />
+                    <EditText
+                        android:id="@+id/spn_to_time"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/spacing_xxlarge"
+                        android:layout_weight="1.5"
+                        android:drawableEnd="@drawable/clock_regular"
+                        android:drawableRight="@drawable/clock_regular"
+                        android:focusable="false"
+                        android:theme="@style/EditText.Grey"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:hint=""
+                        />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_large" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cb_allday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/check_dialog_release_quiz"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/grey_90" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_large" />
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:orientation="horizontal">
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bt_close"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginRight="-4dp"
+                    android:background="@drawable/btn_rounded_white_cancel"
+                    android:text="@string/text_btn_cancel"
+                    android:textAllCaps="false"
+                    android:textColor="@color/paes_color_2"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="@dimen/spacing_large"
+                    android:layout_height="0dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/bt_save"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="-4dp"
+                    android:layout_marginRight="-4dp"
+                    android:background="@drawable/btn_rounded_accept"
+                    android:text="@string/text_unlock"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

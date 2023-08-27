@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:someNamespace="http://schemas.android.com/tools">
+
+
+    <item
+        android:id="@+id/menuSalir"
+        android:orderInCategory="100"
+        android:title="@string/menuSalir"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_notifications"
+        app:actionLayout="@layout/feed_update_count"
+        android:title="Notificaciones"
+        someNamespace:showAsAction="always"
+        app:showAsAction="always"/>
+
+
+</menu>
+

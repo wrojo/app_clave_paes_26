@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/RippleStyleBlack"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/lyt_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/num"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:gravity="center"
+                android:text="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_multi_selection"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|end|center"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/spacing_large"
+        android:paddingTop="@dimen/spacing_large">
+            <TextView
+                android:id="@+id/letter1"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/shape_rounded_orange"
+                android:gravity="center"
+                android:text="A"
+                android:backgroundTint="@color/grey_5"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                 />
+
+
+        <View
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="0dp" />
+
+
+
+            <TextView
+                android:id="@+id/letter2"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/shape_rounded_orange"
+                android:gravity="center"
+                android:text="B"
+                android:backgroundTint="@color/grey_5"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                 />
+
+        <View
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="0dp" />
+
+
+
+        <TextView
+            android:id="@+id/letter3"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/shape_rounded_orange"
+            android:gravity="center"
+            android:text="C"
+            android:backgroundTint="@color/grey_5"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+             />
+
+        <View
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="0dp" />
+
+
+
+        <TextView
+            android:id="@+id/letter4"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/shape_rounded_orange"
+            android:gravity="center"
+            android:text="D"
+            android:backgroundTint="@color/grey_5"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+             />
+
+        <View
+            android:layout_width="@dimen/spacing_large"
+            android:layout_height="0dp" />
+
+
+
+        <TextView
+            android:id="@+id/letter5"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/shape_rounded_orange"
+            android:gravity="center"
+            android:text="E"
+            android:backgroundTint="@color/grey_5"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+
+
+    </LinearLayout>
+
+
+    </LinearLayout>
+
+</com.balysv.materialripple.MaterialRippleLayout>

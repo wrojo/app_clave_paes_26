@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/grp_1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_trending"
+            android:icon="@drawable/ic_whatshot"
+            android:title="@string/menu_revisiones" />
+        <item
+            android:id="@+id/nav_latest"
+            android:icon="@drawable/ic_schedule"
+            android:title="@string/menu_escanear" />
+
+    </group>
+    <group
+        android:id="@+id/grp_2"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_close"
+            android:title="Cerrar sesión" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help"
+            android:title="@string/menu_ayuda" />
+
+    </group>
+
+</menu>

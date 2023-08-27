@@ -1,0 +1,157 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lyt_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/paes_color_2"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentInsetStartWithNavigation="0dp"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_middle"
+            android:layout_marginBottom="@dimen/spacing_middle"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textQuiz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="@string/title_activity_courses"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/grey_90"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/textQuestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="@string/title_activity_courses"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/grey_60"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:orientation="vertical">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUploadResult"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                app:backgroundTint="@color/paes_color_4"
+                app:icon="@drawable/ic_cloud_upload"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:iconTint="@color/white"
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/text_btn_upload_result" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_download"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                app:backgroundTint="@color/paes_color_5"
+                app:icon="@drawable/ic_cloud_download"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:iconTint="@color/white"
+                app:cornerRadius="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/text_btn_download_sheet" />
+
+            <View
+                android:layout_width="@dimen/spacing_large"
+                android:layout_height="0dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_middle"
+            android:layout_marginBottom="@dimen/spacing_middle"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textStudents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="Estudiantes: 25"
+                android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
+                android:textColor="@color/grey_90"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:scrollingCache="true" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end|center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_escanear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_large"
+        android:clickable="true"
+        android:text="NORMAL"
+        app:tint="@android:color/white"
+        app:backgroundTint="@color/paes_color_2"
+        app:fabSize="normal"
+        app:rippleColor="@android:color/white"
+        app:srcCompat="@drawable/ic_center_focus_weak" />
+    </LinearLayout>
+    <include layout="@layout/include_no_item" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

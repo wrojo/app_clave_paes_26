@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/menuEscanear"
+    android:orderInCategory="100"
+    android:title="@string/menuEscanear"
+    app:showAsAction="never" />
+    <item
+        android:id="@+id/menuSubir"
+        android:orderInCategory="101"
+        android:title="@string/menuUpResultados"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menuEliminar"
+        android:orderInCategory="102"
+        android:title="@string/menuEliminarResultados"
+        app:showAsAction="never" />
+</menu>
