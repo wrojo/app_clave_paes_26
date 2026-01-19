@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.gruposm.chile.apppaes'
+    namespace 'com.gruposm.chile.appclavepaes26'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.gruposm.chile.apppaes"
+        applicationId "com.gruposm.chile.appclavepaes26"
         minSdk 24
         targetSdk 33
         versionCode 2
