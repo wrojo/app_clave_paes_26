@@ -116,6 +116,16 @@
             android:backgroundTint="@color/grey_5"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
+        <TextView
+            android:id="@+id/textOpen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:gravity="center"
+            android:text="Desarrollo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="gone" />
+
 
 
     </LinearLayout>

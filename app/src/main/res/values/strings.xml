@@ -140,6 +140,8 @@
     <string name="text_error_upload_results_no_items">No existen resultados para subir</string>
     <string name="text_total_students">Estudiantes: %1$s</string>
     <string name="text_btn_download_sheet">Descargar hoja de respuestas</string>
+    <string name="text_success_download_sheet">Descarga iniciada</string>
+    <string name="text_dialog_download_sheet">Descargando hoja de respuestas...</string>
     <string name="text_btn_upload_result">Subir resultados</string>
     <string name="text_no_result_message">No existen resultados</string>
     <string name="text_btn_image">Captura</string>
