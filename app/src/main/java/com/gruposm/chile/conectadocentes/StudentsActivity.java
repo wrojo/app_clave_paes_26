@@ -260,7 +260,7 @@ public class StudentsActivity extends AppCompatActivity {
             return;
         }
         Uri uri = Uri.parse(BuildConfig.SERVER_SHEET_SERVICE).buildUpon()
-                .appendQueryParameter("curso_evaluacion_alumno_id", ensayoId)
+                .appendQueryParameter("curso_evaluacion_id", ensayoId)
                 .build();
         Log.d("SHEET", "url=" + uri.toString());
         Request<byte[]> request = new Request<byte[]>(Request.Method.GET, uri.toString(), new Response.ErrorListener() {
