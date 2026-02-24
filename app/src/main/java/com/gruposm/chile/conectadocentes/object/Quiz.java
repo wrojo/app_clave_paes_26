@@ -15,6 +15,8 @@ public class Quiz {
     private int liberado;
     private String urlHojaRespuestas;
     private List<Result> results;
+    private List<Student> students;
+    private String origen;
 
     public String getId() {
         return id;
@@ -110,5 +112,21 @@ public class Quiz {
 
     public void setResults(List<Result> results) {
         this.results = results;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
     }
 }

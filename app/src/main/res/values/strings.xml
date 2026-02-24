@@ -111,7 +111,7 @@
     <string name="scannerTxtInfo">Alinear cuadrados con los de la hoja de respuesta</string>
     <string name="scannerTxtResult">%1$s %2$s/%3$s %4$s</string>
     <string name="title_activity_courses">Mis cursos</string>
-    <string name="title_activity_quizzes">Ensayos</string>
+    <string name="title_activity_quizzes">Evaluaciones</string>
     <string name="title_activity_students">Mis estudiantes</string>
     <string name="title_activity_result">Estudiante</string>
     <string name="title_activity_scanner">Escanear</string>

@@ -15,7 +15,12 @@ import com.gruposm.chile.conectadocentes.object.Result;
 import com.gruposm.chile.conectadocentes.object.Student;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
+import java.util.Locale;
 
 public class ManageSql {
     AdminSqlLite mySqlLite;
@@ -24,12 +29,13 @@ public class ManageSql {
     private static String TABLE_COURSES = "cursos";
     private static String TABLE_QUIZZES = "ensayos";
     private static String TABLE_STUDENTS = "estudiantes";
+    private static String TABLE_QUIZ_STUDENTS = "ensayo_estudiantes";
     private static final String TAG = "MANAGE_SQL";
     private SQLiteDatabase miDb;
     private Context ctx;
 
     public ManageSql(Context c) {
-        mySqlLite = new AdminSqlLite(c,ManageSql.NAME_DB, null, 1);
+        mySqlLite = new AdminSqlLite(c,ManageSql.NAME_DB, null, 3);
         miDb = mySqlLite.getWritableDatabase();
         this.ctx = c;
     }
@@ -40,7 +46,8 @@ public class ManageSql {
         int respDelete1 = miDb.delete(TABLE_COURSES,null,null);
         int respDelete2 = miDb.delete(TABLE_QUIZZES,null,null);
         int respDelete3 = miDb.delete(TABLE_STUDENTS,null,null);
-        if(respDelete1 < 0 || respDelete2 < 0 || respDelete3 < 0)
+        int respDelete4 = miDb.delete(TABLE_QUIZ_STUDENTS,null,null);
+        if(respDelete1 < 0 || respDelete2 < 0 || respDelete3 < 0 || respDelete4 < 0)
         {
             miDb.endTransaction();
             miDb.close();
@@ -98,6 +105,19 @@ public class ManageSql {
                         error = true;
                         break;
                     }
+                }
+                List<Student> quizStudents = quiz.getStudents();
+                if (quizStudents != null) {
+                    for (Student student : quizStudents) {
+                        long respQuizStudent = this.insertQuizStudent(quiz, student);
+                        if (respQuizStudent == -1) {
+                            error = true;
+                            break;
+                        }
+                    }
+                }
+                if (error) {
+                    break;
                 }
             }
             if(error)
@@ -384,6 +404,7 @@ public class ManageSql {
                 try {
                     String[] args = new String[]{String.valueOf(course.getId())};
                     Cursor c = miDb.rawQuery("select * from "+ManageSql.TABLE_QUIZZES+" where curso_id = ?", args);
+                    List<Quiz> quizzes = new ArrayList<>();
                     while (c.moveToNext()) {
                         Quiz quiz = new Quiz();
                         quiz.setId(c.getString(0));
@@ -397,13 +418,51 @@ public class ManageSql {
                         quiz.setTotalPreguntas(c.getInt(8));
                         quiz.setTotalOpciones(c.getInt(9));
                         quiz.setCorrectas(c.getString(10));
-                        Inbox inbox =  new Inbox();
-                        inbox.idStr = quiz.getId();
-                        inbox.from = quiz.getNombre();
-                        inbox.email = String.valueOf(quiz.getTotalPreguntas()) + " " + ctx.getResources().getString(R.string.text_answers);
-                        inbox.quiz = quiz;
-                        items.add(inbox);
+                        quiz.setOrigen(c.getString(11));
+                        quizzes.add(quiz);
                     }
+                    Map<String, List<Quiz>> grouped = new HashMap<>();
+                    Map<String, String> originLabels = new HashMap<>();
+                    for (Quiz quiz : quizzes) {
+                        String originKey = resolveOriginKey(quiz);
+                        Log.d(TAG, "quiz_origin id=" + quiz.getId()
+                                + " nombre=" + quiz.getNombre()
+                                + " origen=" + quiz.getOrigen()
+                                + " tipo=" + quiz.getTipo()
+                                + " url=" + quiz.getUrlHojaRespuestas()
+                                + " key=" + originKey);
+                        List<Quiz> list = grouped.get(originKey);
+                        if (list == null) {
+                            list = new ArrayList<>();
+                            grouped.put(originKey, list);
+                        }
+                        list.add(quiz);
+                        if (!originLabels.containsKey(originKey)) {
+                            originLabels.put(originKey, resolveOriginLabel(quiz));
+                        }
+                    }
+                    List<String> userKeys = new ArrayList<>();
+                    List<String> otherKeys = new ArrayList<>();
+                    for (String key : grouped.keySet()) {
+                        if (isUserOriginKey(key)) {
+                            userKeys.add(key);
+                            continue;
+                        }
+                        if ("sin_origen".equals(key)) {
+                            continue;
+                        }
+                        otherKeys.add(key);
+                    }
+                    Collections.sort(userKeys);
+                    Collections.sort(otherKeys);
+                    Log.d(TAG, "quiz_origin userKeys=" + userKeys + " otherKeys=" + otherKeys);
+                    for (String key : userKeys) {
+                        addOriginGroup(items, grouped, originLabels, key);
+                    }
+                    for (String key : otherKeys) {
+                        addOriginGroup(items, grouped, originLabels, key);
+                    }
+                    addOriginGroup(items, grouped, originLabels, "sin_origen");
                     miDb.close();
                     return items;
                 }
@@ -434,6 +493,7 @@ public class ManageSql {
         register.put("total_preguntas",quiz.getTotalPreguntas());
         register.put("total_opciones",quiz.getTotalOpciones());
         register.put("correctas",quiz.getCorrectas());
+        register.put("origen",quiz.getOrigen());
         if(miDb!=null){
             long resp = miDb.insert(ManageSql.TABLE_QUIZZES,null,register);
             if(resp != -1){
@@ -456,6 +516,7 @@ public class ManageSql {
         register.put("total_preguntas",quiz.getTotalPreguntas());
         register.put("total_opciones",quiz.getTotalOpciones());
         register.put("correctas",quiz.getCorrectas());
+        register.put("origen",quiz.getOrigen());
         if(miDb!=null){
             String[] args = new String[]{String.valueOf(quiz.getId())};
             long resp = miDb.update(ManageSql.TABLE_QUIZZES,register,"id = ?",args);
@@ -505,6 +566,7 @@ public class ManageSql {
                         _quiz.setTotalPreguntas(c.getInt(8));
                         _quiz.setTotalOpciones(c.getInt(9));
                         _quiz.setCorrectas(c.getString(10));
+                        _quiz.setOrigen(c.getString(11));
                         miDb.close();
                         return _quiz;
                     }
@@ -532,6 +594,100 @@ public class ManageSql {
         }
         return -1;
     }
+
+    private String normalizeOriginKey(String origin) {
+        if (origin == null) {
+            return "sin_origen";
+        }
+        String cleaned = origin.trim().toLowerCase(Locale.ROOT);
+        if (cleaned.isEmpty()) {
+            return "sin_origen";
+        }
+        return cleaned;
+    }
+
+    private boolean isUserOriginKey(String key) {
+        if (key == null) {
+            return false;
+        }
+        String cleaned = key.trim().toLowerCase(Locale.ROOT);
+        if (cleaned.contains("usuario")) {
+            return true;
+        }
+        if (cleaned.contains("mis evaluaciones")) {
+            return true;
+        }
+        return cleaned.startsWith("mis ");
+    }
+
+    private String resolveOriginKey(Quiz quiz) {
+        String origin = quiz.getOrigen();
+        String normalized = normalizeOriginKey(origin);
+        if (!"sin_origen".equals(normalized)) {
+            return normalized;
+        }
+        String tipo = quiz.getTipo();
+        String url = quiz.getUrlHojaRespuestas();
+        String tipoKey = tipo != null ? tipo.toLowerCase(Locale.ROOT) : "";
+        String urlKey = url != null ? url.toLowerCase(Locale.ROOT) : "";
+        if (tipoKey.contains("sm") || urlKey.startsWith("sm_asset")) {
+            return "sm";
+        }
+        return "usuario";
+    }
+
+    private String resolveOriginLabel(Quiz quiz) {
+        String origin = quiz.getOrigen();
+        if (origin != null && !origin.trim().isEmpty()) {
+            return origin.trim();
+        }
+        String key = resolveOriginKey(quiz);
+        if ("sm".equals(key)) {
+            return "SM";
+        }
+        if ("usuario".equals(key)) {
+            return "usuario";
+        }
+        return "Sin origen";
+    }
+
+    private String formatOriginTitle(String origin) {
+        if (origin == null) {
+            return "Sin origen";
+        }
+        String cleaned = origin.trim();
+        if (cleaned.isEmpty()) {
+            return "Sin origen";
+        }
+        return cleaned;
+    }
+
+    private void addOriginGroup(List<Inbox> items, Map<String, List<Quiz>> grouped, Map<String, String> originLabels, String key) {
+        List<Quiz> list = grouped.get(key);
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        Collections.sort(list, new Comparator<Quiz>() {
+            @Override
+            public int compare(Quiz a, Quiz b) {
+                String nameA = a.getNombre() != null ? a.getNombre() : "";
+                String nameB = b.getNombre() != null ? b.getNombre() : "";
+                return nameA.compareTo(nameB);
+            }
+        });
+        Inbox header = new Inbox();
+        header.isHeader = true;
+        header.from = originLabels.get(key);
+        items.add(header);
+        for (Quiz quiz : list) {
+            Inbox inbox = new Inbox();
+            inbox.idStr = quiz.getId();
+            inbox.from = quiz.getNombre();
+            inbox.email = String.valueOf(quiz.getTotalPreguntas()) + " " + ctx.getResources().getString(R.string.text_answers);
+            inbox.quiz = quiz;
+            items.add(inbox);
+        }
+    }
     // Estudiantes
     public ArrayList<Inbox> ListStudents(Course course, Quiz quiz)
     {
@@ -545,12 +701,12 @@ public class ManageSql {
                     //subSql = TABLE_RESULTS;
                     String sql;
                     sql = "";
-                    sql+=" select estudiante.*, resultado.*";
-                    sql+=" FROM " + TABLE_STUDENTS+ " estudiante LEFT JOIN " + subSql +" resultado ON estudiante.rut = resultado.rut";
-                    sql+=" where estudiante.curso_id = ?";
+                    sql+=" select estudiante.id, estudiante.curso_id, estudiante.apellidos, estudiante.nombres, estudiante.rut, resultado.*";
+                    sql+=" FROM " + TABLE_QUIZ_STUDENTS+ " estudiante LEFT JOIN " + subSql +" resultado ON estudiante.rut = resultado.rut";
+                    sql+=" where estudiante.curso_id = ? and estudiante.ensayo_id = ?";
                     sql+=" GROUP BY estudiante.rut";
                     sql+=" ORDER BY estudiante.apellidos, estudiante.nombres";
-                    String[] args = new String[]{quiz.getId(),course.getId(),course.getId()};
+                    String[] args = new String[]{quiz.getId(),course.getId(),course.getId(),quiz.getId()};
                     Cursor c = miDb.rawQuery(sql, args);
                     while (c.moveToNext()) {
                         Student student = new Student();
@@ -610,6 +766,23 @@ public class ManageSql {
         }
         miDb.close();
         return items;
+    }
+
+    public long insertQuizStudent(Quiz quiz, Student student) {
+        ContentValues register = new ContentValues();
+        register.put("id", student.getId());
+        register.put("curso_id", student.getCursoId());
+        register.put("apellidos", student.getApellidos());
+        register.put("nombres", student.getNombres());
+        register.put("rut", student.getRut());
+        register.put("ensayo_id", quiz.getId());
+        if (miDb != null) {
+            long resp = miDb.insert(ManageSql.TABLE_QUIZ_STUDENTS, null, register);
+            if (resp != -1) {
+                return resp;
+            }
+        }
+        return -1;
     }
     public long insertStudent(Student student)
     {

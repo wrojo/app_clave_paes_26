@@ -28,6 +28,8 @@ public class Inbox {
     public String letra;
     public String nivel;
 
+    public boolean isHeader = false;
+
 
     public int color = -1;
 

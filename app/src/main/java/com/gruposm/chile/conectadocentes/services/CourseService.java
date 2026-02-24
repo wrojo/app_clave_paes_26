@@ -73,7 +73,7 @@ public class CourseService {
                             course.setNivel(nivel);
                             course.setIdUsuario(idUsuario);
                             List<Quiz> quizzes =  setQuizzes(course,jsonQuizzes);
-                            List<Student> students =  setStudents(course, jsonStudents);
+                            List<Student> students =  setStudentsWithQuizzes(course, jsonStudents, jsonQuizzes);
                             course.setQuizzes(quizzes);
                             course.setStudents(students);
                             items.add(course);
@@ -167,7 +167,13 @@ public class CourseService {
                     fechaFin = null;
                 }
                 String urlHojaRespuesta = quizObject.getString("url_hoja_respuesta");
+                String origen = quizObject.optString("origen", "").trim();
                 JSONArray jsonResults =  quizObject.getJSONArray("respuestas");
+                List<Student> quizStudents = new ArrayList<>();
+                if (quizObject.has("estudiantes") && !quizObject.isNull("estudiantes")) {
+                    JSONArray jsonQuizStudents = quizObject.getJSONArray("estudiantes");
+                    quizStudents = setStudents(course, jsonQuizStudents);
+                }
                 Quiz quiz = new Quiz();
                 quiz.setId(String.valueOf(id));
                 quiz.setTipo(tipo);
@@ -180,8 +186,10 @@ public class CourseService {
                 quiz.setFechaFin(fechaFin);
                 quiz.setLiberado(esLiberado);
                 quiz.setUrlHojaRespuestas(urlHojaRespuesta);
+                quiz.setOrigen(origen);
                 List<Result> results = this.setResults(course,quiz,jsonResults);
                 quiz.setResults(results);
+                quiz.setStudents(quizStudents);
                 quizzes.add(quiz);
             } catch (JSONException e) {
                 Log.d("quiz", "quiz:" + e.getMessage());
@@ -201,7 +209,7 @@ public class CourseService {
                 int id = studentObject.getInt("id");
                 String apellidos = studentObject.getString("apellidos").trim();
                 String nombres = studentObject.getString("nombres");
-                String rut = studentObject.getString("rut");
+                String rut = studentObject.getString("rut").trim();
 
                 Student student = new Student();
                 student.setId(String.valueOf(id));
@@ -211,6 +219,37 @@ public class CourseService {
                 student.setRut(rut);
                 Log.d("TAG", "___rut:" + student.getRut());
                 students.add(student);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return students;
+    }
+
+    private List<Student> setStudentsWithQuizzes(Course course, JSONArray jsonStudents, JSONArray jsonQuizzes) {
+        List<Student> students = setStudents(course, jsonStudents);
+        HashMap<String, Student> byRut = new HashMap<>();
+        for (Student student : students) {
+            if (student.getRut() != null) {
+                byRut.put(student.getRut(), student);
+            }
+        }
+        for (int c = 0; c < jsonQuizzes.length(); c++) {
+            try {
+                JSONObject quizObject = jsonQuizzes.getJSONObject(c);
+                if (!quizObject.has("estudiantes") || quizObject.isNull("estudiantes")) {
+                    continue;
+                }
+                JSONArray jsonQuizStudents = quizObject.getJSONArray("estudiantes");
+                List<Student> quizStudents = setStudents(course, jsonQuizStudents);
+                for (Student student : quizStudents) {
+                    String rut = student.getRut();
+                    if (rut == null || byRut.containsKey(rut)) {
+                        continue;
+                    }
+                    byRut.put(rut, student);
+                    students.add(student);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

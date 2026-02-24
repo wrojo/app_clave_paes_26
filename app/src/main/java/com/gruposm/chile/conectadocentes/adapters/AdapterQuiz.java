@@ -25,6 +25,7 @@ public class AdapterQuiz extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_FREE = 1;
     private final int VIEW_NO_FREE = 0;
+    private final int VIEW_HEADER = 2;
     private Context ctx;
     private List<Inbox> items;
     private OnClickListener onClickListener = null;
@@ -50,6 +51,13 @@ public class AdapterQuiz extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             message = (TextView) view.findViewById(R.id.message);
             lyt_checked = (RelativeLayout) view.findViewById(R.id.lyt_checked);
             lyt_parent = (View) view.findViewById(R.id.lyt_parent);
+        }
+    }
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public TextView textHeader;
+        public HeaderViewHolder(View view) {
+            super(view);
+            textHeader = (TextView) view.findViewById(R.id.text_header);
         }
     }
     public static class UnlockViewHolder extends RecyclerView.ViewHolder {
@@ -84,7 +92,10 @@ public class AdapterQuiz extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
-        if (viewType == VIEW_FREE) {
+        if (viewType == VIEW_HEADER) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz_header, parent, false);
+            vh = new AdapterQuiz.HeaderViewHolder(v);
+        } else if (viewType == VIEW_FREE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quiz, parent, false);
             vh = new AdapterQuiz.ResultHolder(v);
         } else {
@@ -97,7 +108,10 @@ public class AdapterQuiz extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final Inbox inbox = items.get(position);
-        if (holder instanceof AdapterQuiz.ResultHolder)
+        if (holder instanceof AdapterQuiz.HeaderViewHolder) {
+            AdapterQuiz.HeaderViewHolder view = (AdapterQuiz.HeaderViewHolder) holder;
+            view.textHeader.setText(inbox.from);
+        } else if (holder instanceof AdapterQuiz.ResultHolder)
         {
             AdapterQuiz.ResultHolder view = (AdapterQuiz.ResultHolder) holder;
             view.from.setText(inbox.from);
@@ -154,7 +168,11 @@ public class AdapterQuiz extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
     @Override
     public int getItemViewType(int position) {
-        return this.items.get(position).quiz.getLiberado() == 1 ? VIEW_FREE : VIEW_NO_FREE;
+        Inbox inbox = this.items.get(position);
+        if (inbox.isHeader) {
+            return VIEW_HEADER;
+        }
+        return inbox.quiz.getLiberado() == 1 ? VIEW_FREE : VIEW_NO_FREE;
     }
 
     public void toggleSelection(int pos) {
