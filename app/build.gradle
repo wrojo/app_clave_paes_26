@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.gruposm.chile.conectadocentes'
+    namespace 'cl.gruposm.conectaevaluaciones'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.gruposm.chile.conectadocentes"
+        applicationId "cl.gruposm.conectaevaluaciones"
         minSdk 24
         targetSdk 33
         versionCode 2

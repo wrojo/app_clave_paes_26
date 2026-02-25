@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CLAVE PAES Docentes</string>
+    <string name="app_name">Conecta Evaluaciones</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">ScanDoc SM</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -151,7 +151,7 @@
     <string name="text_menu_4">Cerrar sesión</string>
     <string name="text_menu_5">Créditos</string>
     <string name="text_title_no_item">Sin resultados</string>
-    <string name="text_message_no_item">Lamentablemente no tenemos nada que mostrar.</string>
+    <string name="text_message_no_item"></string>
     <string name="text_corrects">Correctas</string>
     <string name="text_incorrects">Incorrectas</string>
     <string name="text_omitted">Sin responder</string>
