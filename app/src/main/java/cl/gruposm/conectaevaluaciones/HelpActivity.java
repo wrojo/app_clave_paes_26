@@ -22,32 +22,36 @@ import cl.gruposm.conectaevaluaciones.utils.Tools;
 
 public class HelpActivity extends AppCompatActivity {
 
-    private static final int MAX_STEP = 9;
+    private static final int MAX_STEP = 11;
     private SessionHelp sessionHelp;
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private Button btnNext;
     private String about_title_array[] = {
-            "Bienvenido a Clave PAES",
+            "Bienvenido a Conecta Evaluaciones",
             "Crea tu curso en la plataforma",
-            "Ensayos",
-            "Libera tus ensayos",
-            "Ensayos presenciales",
+            "Evaluaciones disponibles",
+            "Programa tu evaluación",
+            "Modalidades de rendición",
             "Hoja de respuestas",
-            "Captura las hojas de respuestas",
+            "Escanea las hojas",
+            "Procesamiento automático",
             "Escaneo múltiple",
+            "Finalizar proceso",
             "Comencemos"
     };
     private String about_description_array[] = {
-            "Hemos preparado esta herramienta para facilitar la captura de las hojas de respuestas de tus ensayos Clave PAES",
-            "Ingresa a la plataforma y crea tus clases. No olvides añadir a tus estudiantes. Luego, ingresa al curso para programar el ensayo.",
-            "Clave PAES cuenta con ensayos de libre disposición del estudiante y otros que deben ser liberados por el docente.",
-            "Los ensayos medidos por el docente pueden ser programados en una fecha determinada. Los estudiantes serán notificados con la fecha.",
-            "Existen dos modalidades de rendición, en línea o presenciales.",
-            "Para capturar las hojas respuestas de los estudiantes hemos creado una herramienta de IA que permite reconocer las respuestas del estudiante y enviarlas a la plataforma.",
-            "Al ingresar al ensayo encontrarás un icono con forma de QR el que puedes utilizar para escanear la hoja de respuestas, la que será procesada de manera inmediata.",
-            "Puedes escanear de manera secuencial las hojas de respuestas de todos los estudiantes.",
-            "Puedes encontrar esta ayuda en el menú de la izquierda o consulta nuestros videos tutoriales."
+            "Hemos preparado esta herramienta para facilitar la captura digital de las hojas de respuestas de las evaluaciones realizadas en SM Conecta v4.",
+            "Ingresa a SM Conecta v4, crea tu curso y agrega a tus estudiantes. Desde el curso podrás programar evaluaciones para su aplicación.",
+            "Las evaluaciones pueden estar disponibles para rendición en línea o en modalidad presencial según la planificación del docente.",
+            "Las evaluaciones presenciales pueden ser programadas con fecha y hora específicas. Los estudiantes serán notificados desde la plataforma.",
+            "Existen dos modalidades: evaluación en línea o aplicación presencial con hoja de respuestas impresa.",
+            "Para las evaluaciones presenciales se utiliza una hoja de respuestas estandarizada que será procesada automáticamente por la aplicación.",
+            "Dentro de cada evaluación encontrarás el ícono de escaneo. Utiliza la cámara del dispositivo para capturar la hoja de respuestas.",
+            "La aplicación utiliza reconocimiento inteligente para detectar y validar las respuestas marcadas por el estudiante.",
+            "Puedes escanear de manera continua las hojas de todos los estudiantes del curso sin salir del proceso.",
+            "Una vez completado el escaneo, las respuestas serán enviadas automáticamente a SM Conecta v4 para su corrección y análisis.",
+            "Puedes revisar esta guía cuando lo necesites desde el menú lateral o consultar nuestros tutoriales."
     };
     private int about_images_array[] = {
             R.drawable.logo_paes,
@@ -57,6 +61,8 @@ public class HelpActivity extends AppCompatActivity {
             R.drawable.step04,
             R.drawable.step05,
             R.drawable.step06,
+            R.drawable.step07,
+            R.drawable.step07,
             R.drawable.step07,
             R.drawable.step08
     };

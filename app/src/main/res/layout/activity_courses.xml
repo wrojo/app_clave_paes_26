@@ -82,7 +82,8 @@
 
             <View
                 android:layout_width="0dp"
-                android:layout_height="@dimen/spacing_middle" />
+                android:layout_height="@dimen/spacing_middle"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/btnMenu2"
@@ -93,7 +94,8 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/spacing_mlarge"
-                android:paddingRight="@dimen/spacing_mlarge">
+                android:paddingRight="@dimen/spacing_mlarge"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -152,7 +154,8 @@
 
             <View
                 android:layout_width="0dp"
-                android:layout_height="@dimen/spacing_middle" />
+                android:layout_height="@dimen/spacing_middle"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/btnMenu5"
@@ -163,7 +166,8 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/spacing_mlarge"
-                android:paddingRight="@dimen/spacing_mlarge">
+                android:paddingRight="@dimen/spacing_mlarge"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="20dp"
