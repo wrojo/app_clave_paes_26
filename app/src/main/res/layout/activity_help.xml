@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="#fef9fe"
     android:fitsSystemWindows="false"
     android:orientation="vertical">
 
@@ -16,7 +16,7 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white" />
+            android:background="#fef9fe" />
 
         <ImageButton
             android:id="@+id/bt_close"
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@android:color/white"
+        android:background="#fef9fe"
         android:gravity="center|top"
         android:orientation="horizontal" />
 

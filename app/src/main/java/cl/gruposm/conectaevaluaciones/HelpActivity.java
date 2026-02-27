@@ -22,7 +22,7 @@ import cl.gruposm.conectaevaluaciones.utils.Tools;
 
 public class HelpActivity extends AppCompatActivity {
 
-    private static final int MAX_STEP = 11;
+    private static final int MAX_STEP = 10;
     private SessionHelp sessionHelp;
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
@@ -35,9 +35,8 @@ public class HelpActivity extends AppCompatActivity {
             "Modalidades de rendición",
             "Hoja de respuestas",
             "Escanea las hojas",
-            "Procesamiento automático",
-            "Escaneo múltiple",
-            "Finalizar proceso",
+            "Enviar a Conecta",
+            "Informes",
             "Comencemos"
     };
     private String about_description_array[] = {
@@ -48,23 +47,21 @@ public class HelpActivity extends AppCompatActivity {
             "Existen dos modalidades: evaluación en línea o aplicación presencial con hoja de respuestas impresa.",
             "Para las evaluaciones presenciales se utiliza una hoja de respuestas estandarizada que será procesada automáticamente por la aplicación.",
             "Dentro de cada evaluación encontrarás el ícono de escaneo. Utiliza la cámara del dispositivo para capturar la hoja de respuestas.",
-            "La aplicación utiliza reconocimiento inteligente para detectar y validar las respuestas marcadas por el estudiante.",
-            "Puedes escanear de manera continua las hojas de todos los estudiantes del curso sin salir del proceso.",
-            "Una vez completado el escaneo, las respuestas serán enviadas automáticamente a SM Conecta v4 para su corrección y análisis.",
+            "Una vez completado el escaneo, las respuestas podrás enviarlas a SM Conecta v4 para su corrección y análisis.",
+            "Podrás revisar los informes del curso y de tus estudiantes en la plataforma SM Conecta.",
             "Puedes revisar esta guía cuando lo necesites desde el menú lateral o consultar nuestros tutoriales."
     };
     private int about_images_array[] = {
-            R.drawable.logo_paes,
-            R.drawable.step01,
-            R.drawable.step02,
-            R.drawable.step03,
-            R.drawable.step04,
-            R.drawable.step05,
-            R.drawable.step06,
-            R.drawable.step07,
-            R.drawable.step07,
-            R.drawable.step07,
-            R.drawable.step08
+            R.drawable.help_01,
+            R.drawable.help_02,
+            R.drawable.help_03,
+            R.drawable.help_04,
+            R.drawable.help_05,
+            R.drawable.help_06,
+            R.drawable.help_07,
+            R.drawable.help_08,
+            R.drawable.help_09,
+            R.drawable.help_10
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {

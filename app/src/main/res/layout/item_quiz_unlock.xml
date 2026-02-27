@@ -97,6 +97,7 @@
                     android:orientation="horizontal"
                     app:flexWrap="wrap"
                     app:justifyContent="center">
+                <!-- Boton Liberar oculto temporalmente -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/btn_unlock"
                     android:layout_width="match_parent"
@@ -106,6 +107,7 @@
                     android:text="@string/text_unlock_down"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:textColor="@color/paes_color_2"
+                    android:visibility="gone"
                     app:chipStrokeColor="@color/paes_color_2"
                     app:chipStrokeWidth="2dp"
                     android:textAlignment="center"

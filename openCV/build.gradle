@@ -99,11 +99,11 @@ def openCVersionCode = ((4 * 100 + 7) * 100 + 0) * 10 + 0
 println "OpenCV: " +openCVersionName + " " + project.buildscript.sourceFile
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         versionCode openCVersionCode
         versionName openCVersionName

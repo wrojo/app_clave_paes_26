@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'cl.gruposm.conectaevaluaciones'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "cl.gruposm.conectaevaluaciones"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 2
         versionName "1.1"
 
@@ -35,13 +35,14 @@ android {
             buildConfigField "String", SERVER_SHEET_SERVICE, '"https://www.desarrollosm.cl/desarrollo/local_waldo_paes/v4-evaluaciones/hoja-respuesta/"'
         }
         release {
-            //https://clavepaes.cl/v4/
-            buildConfigField "String", SERVER_LOGIN_SERVICE, '"https://clavepaes.cl/v4/paes/login.json"'
-            buildConfigField "String", SERVER_UPDATE_TOKEN_SERVICE, '"https://www.desarrollosm.cl/desarrollo/local_waldo_paes/users/refresh.json"'
-            buildConfigField "String", SERVER_COURSE_SERVICE, '"https://clavepaes.cl/v4/paes/index.json"'
-            buildConfigField "String", SERVER_RELEASE_SERVICE, '"https://clavepaes.cl/v4/paes/release"'
-            buildConfigField "String", SERVER_BULK_RESULT_SERVICE, '"https://clavepaes.cl/v4/paes/bulk_result.json"'
-            buildConfigField "String", SERVER_SHEET_SERVICE, '"https://www.desarrollosm.cl/desarrollo/local_waldo_paes/v4-evaluaciones/hoja-respuesta/"'
+            //https://conectaevaluaciones.smconecta.cl
+            buildConfigField "String", SERVER_LOGIN_SERVICE, '"https://conectaevaluaciones.smconecta.cl/users/login.json"'
+            buildConfigField "String", SERVER_UPDATE_TOKEN_SERVICE, '"https://conectaevaluaciones.smconecta.cl/users/refresh.json"'
+            buildConfigField "String", SERVER_COURSE_SERVICE, '"https://conectaevaluaciones.smconecta.cl/api/index.json"'
+            buildConfigField "String", SERVER_RELEASE_SERVICE, '"https://conectaevaluaciones.smconecta.cl/api/release"'
+            buildConfigField "String", SERVER_BULK_RESULT_SERVICE, '"https://conectaevaluaciones.smconecta.cl/api/bulk_result.json"'
+            buildConfigField "String", SERVER_SHEET_SERVICE, '"https://conectaevaluaciones.smconecta.cl/v4-evaluaciones/hoja-respuesta/"'
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
