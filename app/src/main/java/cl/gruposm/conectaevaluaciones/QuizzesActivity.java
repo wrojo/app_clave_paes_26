@@ -113,6 +113,7 @@ public class QuizzesActivity extends AppCompatActivity {
                     Intent i= new Intent(QuizzesActivity.this, StudentsActivity.class);
                     i.putExtra("curso_id",courseId);
                     i.putExtra("quiz_id",inbox.idStr);
+                    i.putExtra("nivel",course.getNivel());
                     startActivity(i);
                 }
             }

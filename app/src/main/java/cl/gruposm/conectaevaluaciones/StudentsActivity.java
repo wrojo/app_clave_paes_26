@@ -64,6 +64,7 @@ public class StudentsActivity extends AppCompatActivity {
     private ManageSql manageSql;
     private String courseId;
     private String quizId;
+    private String levelName;
     private TextView textQuiz;
     private TextView textQuestions;
     private TextView textStudents;
@@ -110,6 +111,7 @@ public class StudentsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         courseId = intent.getStringExtra("curso_id");
         quizId = intent.getStringExtra("quiz_id");
+        levelName = intent.getStringExtra("nivel");
         errorScan = intent.getBooleanExtra("error",false);
         course =  new Course();
         course.setId(courseId);
@@ -138,6 +140,7 @@ public class StudentsActivity extends AppCompatActivity {
                 Intent i= new Intent(StudentsActivity.this, ScannerActivity.class);
                 i.putExtra("curso_id",courseId);
                 i.putExtra("quiz_id",quizId);
+                i.putExtra("nivel",levelName);
                 startActivity(i);
 
             }

@@ -56,6 +56,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.Analyzer, View.OnClickListener {
+    // Enable only when visualizing the sheet2 processing pipeline.
+    private static final boolean SHOW_SHEET2_PROCESS_DEBUG_PREVIEW = false;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private static final String TAG = "ScannerActivity";
     PreviewView previewView;
@@ -79,6 +81,7 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
     private ManageSql manageSql;
     private String quizId;
     private String courseId;
+    private String levelName;
     private Bitmap currentBitmap;
     private SessionManager session;
     Map<String, String> results;
@@ -114,13 +117,14 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
         Intent intent = getIntent();
         courseId = intent.getStringExtra("curso_id");
         quizId = intent.getStringExtra("quiz_id");
+        levelName = intent.getStringExtra("nivel");
         // Iniiciar objecto de detección
         Course course =  new Course();
         course.setId(courseId);
         Quiz quiz =  new Quiz();
         quiz.setId(quizId);
         quiz = this.manageSql.getQuiz(quiz,course);
-        this.detectionUtil =  new DetectionUtil(quiz);
+        this.detectionUtil =  new DetectionUtil(quiz, levelName);
         if(this.detectionUtil.isErrorDetection)
         {
             exitView(1);
@@ -290,6 +294,7 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
         String rut = detectionUtil.findRut(warped);
         if(rut == null)
         {
+            Log.d("TAG", "rut_invalid_debug template_info=" + detectionUtil.getLastRutDebug() + " corner_info=" + detectionUtil.getLastCornerDebug());
             this.showMessage(getResources().getString(R.string.scannerTxtErrorRut));
             return;
         }
@@ -297,12 +302,14 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
         Log.d("TAG", "_rut:" + rut);
         Mat th = detectionUtil.findAnswers(warped);
         Mat finalPaper = detectionUtil.drawAnswer(warped);
+        final boolean showProcessDebugPreview = detectionUtil.isAnswerSheet2Template() && SHOW_SHEET2_PROCESS_DEBUG_PREVIEW;
+        final Mat paperForPreview = showProcessDebugPreview ? th : finalPaper;
         results = detectionUtil.printResult();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Bitmap bm = Bitmap.createBitmap(finalPaper.cols(), finalPaper.rows(),Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(finalPaper,bm);
+                Bitmap bm = Bitmap.createBitmap(paperForPreview.cols(), paperForPreview.rows(),Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(paperForPreview,bm);
                 currentBitmap = bm;
                 grayView.setImageBitmap(bm);
                 String strCorrect = String.valueOf(results.get("corrects"));
@@ -364,6 +371,7 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
         Intent i = new Intent(ScannerActivity.this, StudentsActivity.class);
         i.putExtra("curso_id",courseId);
         i.putExtra("quiz_id",quizId);
+        i.putExtra("nivel",levelName);
         if(error ==  1)
         {
             i.putExtra("error",true);
