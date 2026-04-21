@@ -1,0 +1,1 @@
+ALTER TABLE `v4_evaluaciones` ADD `template_hoja_respuesta` VARCHAR(5) NOT NULL DEFAULT 'V2' AFTER `activo`;

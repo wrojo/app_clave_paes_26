@@ -31,6 +31,7 @@ import org.opencv.utils.Converters;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DetectionUtil {
@@ -146,7 +147,7 @@ public class DetectionUtil {
         // }
         answerSheet.setCorrects(quiz.getCorrectas());
         answerSheet.setOptionsMarkCorrects();
-        Log.d(TAG, "sheetTemplate=" + this.sheetTemplate.name() + " level=" + this.levelName + " width=" + answerSheet.getWidth() + " height=" + answerSheet.getHeight());
+        Log.d(TAG, "sheetTemplate=" + this.sheetTemplate.name() + " apiTemplate=" + quiz.getTemplateHojaRespuesta() + " width=" + answerSheet.getWidth() + " height=" + answerSheet.getHeight());
         // if(!this.isErrorDetection)
         // {
         //     answerSheet.setOptionsMarkCorrects();
@@ -1204,88 +1205,22 @@ public class DetectionUtil {
     }
     private SheetTemplate resolveSheetTemplate(Quiz quiz, String levelName)
     {
-        String levelKey = normalizeLevelKey(levelName);
-        if (!levelKey.isEmpty()) {
-            if (isSheet2Level(levelKey)) {
-                return SheetTemplate.ANSWER_SHEET_2;
-            }
+        String template = safeUpper(quiz.getTemplateHojaRespuesta());
+        if ("V1".equals(template)) {
             return SheetTemplate.LEGACY;
         }
-        String url = safeLower(quiz.getUrlHojaRespuestas());
-        String origin = safeLower(quiz.getOrigen());
-        String tipo = safeUpper(quiz.getTipo());
-        if (containsAny(url, "hoja_respuesta_2", "hoja%20respuesta_2", "hoja+respuesta_2", "hoja respuesta_2", "hoja-respuesta-2", "respuesta_2.pdf", "template_2")) {
+        if ("V2".equals(template)) {
             return SheetTemplate.ANSWER_SHEET_2;
         }
-        if (containsAny(origin, "hoja_respuesta_2", "hoja respuesta 2", "hoja-respuesta-2", "respuesta 2", "template 2")) {
-            return SheetTemplate.ANSWER_SHEET_2;
-        }
-        boolean isKnownLegacyTipo = "A".equals(tipo) || "B".equals(tipo) || "C".equals(tipo) || "D".equals(tipo) || "E".equals(tipo) || "F".equals(tipo);
-        if (!isKnownLegacyTipo && quiz.getTotalPreguntas() == 50 && quiz.getTotalOpciones() == 4) {
-            return SheetTemplate.ANSWER_SHEET_2;
-        }
-        return SheetTemplate.LEGACY;
-    }
-    private String safeLower(String value)
-    {
-        if (value == null) {
-            return "";
-        }
-        return value.trim().toLowerCase();
-    }
-    private String safeLowerNoAccent(String value)
-    {
-        String cleaned = safeLower(value);
-        cleaned = cleaned.replace("á", "a");
-        cleaned = cleaned.replace("é", "e");
-        cleaned = cleaned.replace("í", "i");
-        cleaned = cleaned.replace("ó", "o");
-        cleaned = cleaned.replace("ú", "u");
-        cleaned = cleaned.replace("ü", "u");
-        return cleaned;
-    }
-    private String normalizeLevelKey(String value)
-    {
-        String cleaned = safeLowerNoAccent(value);
-        cleaned = cleaned.replace("º", "");
-        cleaned = cleaned.replace("°", "");
-        cleaned = cleaned.replaceAll("\\s+", " ").trim();
-        return cleaned;
-    }
-    private boolean isSheet2Level(String normalizedLevel)
-    {
-        if (normalizedLevel == null || normalizedLevel.isEmpty()) {
-            return false;
-        }
-        if (normalizedLevel.contains("nueva hoja")) {
-            return true;
-        }
-        for (int i = 1; i <= 6; i++) {
-            String pattern = i + " basico";
-            if (normalizedLevel.contains(pattern)) {
-                return true;
-            }
-        }
-        return false;
+        Log.w(TAG, "template_hoja_respuesta desconocido: " + template + " - se usara V2");
+        return SheetTemplate.ANSWER_SHEET_2;
     }
     private String safeUpper(String value)
     {
         if (value == null) {
             return "";
         }
-        return value.trim().toUpperCase();
-    }
-    private boolean containsAny(String value, String... patterns)
-    {
-        if (value == null || value.isEmpty()) {
-            return false;
-        }
-        for (String pattern : patterns) {
-            if (value.contains(pattern)) {
-                return true;
-            }
-        }
-        return false;
+        return value.trim().toUpperCase(Locale.ROOT);
     }
 
 }

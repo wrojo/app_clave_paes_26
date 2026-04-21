@@ -1,8 +1,10 @@
 package cl.gruposm.conectaevaluaciones.object;
 
 import java.util.List;
+import java.util.Locale;
 
 public class Quiz {
+    public static final String DEFAULT_TEMPLATE_HOJA_RESPUESTA = "V2";
     private String id;
     private String cursoId;
     private String nombre;
@@ -17,6 +19,7 @@ public class Quiz {
     private List<Result> results;
     private List<Student> students;
     private String origen;
+    private String templateHojaRespuesta = DEFAULT_TEMPLATE_HOJA_RESPUESTA;
 
     public String getId() {
         return id;
@@ -128,5 +131,20 @@ public class Quiz {
 
     public void setOrigen(String origen) {
         this.origen = origen;
+    }
+
+    public String getTemplateHojaRespuesta() {
+        if (templateHojaRespuesta == null || templateHojaRespuesta.trim().isEmpty()) {
+            return DEFAULT_TEMPLATE_HOJA_RESPUESTA;
+        }
+        return templateHojaRespuesta.trim().toUpperCase(Locale.ROOT);
+    }
+
+    public void setTemplateHojaRespuesta(String templateHojaRespuesta) {
+        if (templateHojaRespuesta == null || templateHojaRespuesta.trim().isEmpty()) {
+            this.templateHojaRespuesta = DEFAULT_TEMPLATE_HOJA_RESPUESTA;
+            return;
+        }
+        this.templateHojaRespuesta = templateHojaRespuesta.trim().toUpperCase(Locale.ROOT);
     }
 }

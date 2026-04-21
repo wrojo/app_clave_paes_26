@@ -35,7 +35,7 @@ public class ManageSql {
     private Context ctx;
 
     public ManageSql(Context c) {
-        mySqlLite = new AdminSqlLite(c,ManageSql.NAME_DB, null, 3);
+        mySqlLite = new AdminSqlLite(c,ManageSql.NAME_DB, null, 4);
         miDb = mySqlLite.getWritableDatabase();
         this.ctx = c;
     }
@@ -419,6 +419,7 @@ public class ManageSql {
                         quiz.setTotalOpciones(c.getInt(9));
                         quiz.setCorrectas(c.getString(10));
                         quiz.setOrigen(c.getString(11));
+                        quiz.setTemplateHojaRespuesta(readTemplateHojaRespuesta(c));
                         quizzes.add(quiz);
                     }
                     Map<String, List<Quiz>> grouped = new HashMap<>();
@@ -494,6 +495,7 @@ public class ManageSql {
         register.put("total_opciones",quiz.getTotalOpciones());
         register.put("correctas",quiz.getCorrectas());
         register.put("origen",quiz.getOrigen());
+        register.put("template_hoja_respuesta",quiz.getTemplateHojaRespuesta());
         if(miDb!=null){
             long resp = miDb.insert(ManageSql.TABLE_QUIZZES,null,register);
             if(resp != -1){
@@ -517,6 +519,7 @@ public class ManageSql {
         register.put("total_opciones",quiz.getTotalOpciones());
         register.put("correctas",quiz.getCorrectas());
         register.put("origen",quiz.getOrigen());
+        register.put("template_hoja_respuesta",quiz.getTemplateHojaRespuesta());
         if(miDb!=null){
             String[] args = new String[]{String.valueOf(quiz.getId())};
             long resp = miDb.update(ManageSql.TABLE_QUIZZES,register,"id = ?",args);
@@ -567,6 +570,7 @@ public class ManageSql {
                         _quiz.setTotalOpciones(c.getInt(9));
                         _quiz.setCorrectas(c.getString(10));
                         _quiz.setOrigen(c.getString(11));
+                        _quiz.setTemplateHojaRespuesta(readTemplateHojaRespuesta(c));
                         miDb.close();
                         return _quiz;
                     }
@@ -593,6 +597,18 @@ public class ManageSql {
             }
         }
         return -1;
+    }
+
+    private String readTemplateHojaRespuesta(Cursor cursor) {
+        int templateColumn = cursor.getColumnIndex("template_hoja_respuesta");
+        if (templateColumn < 0) {
+            return Quiz.DEFAULT_TEMPLATE_HOJA_RESPUESTA;
+        }
+        String template = cursor.getString(templateColumn);
+        if (template == null || template.trim().isEmpty()) {
+            return Quiz.DEFAULT_TEMPLATE_HOJA_RESPUESTA;
+        }
+        return template;
     }
 
     private String normalizeOriginKey(String origin) {

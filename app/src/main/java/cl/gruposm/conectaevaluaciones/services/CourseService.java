@@ -167,6 +167,7 @@ public class CourseService {
                     fechaFin = null;
                 }
                 String urlHojaRespuesta = quizObject.getString("url_hoja_respuesta");
+                String templateHojaRespuesta = quizObject.optString("template_hoja_respuesta", Quiz.DEFAULT_TEMPLATE_HOJA_RESPUESTA).trim();
                 String origen = quizObject.optString("origen", "").trim();
                 JSONArray jsonResults =  quizObject.getJSONArray("respuestas");
                 List<Student> quizStudents = new ArrayList<>();
@@ -186,6 +187,7 @@ public class CourseService {
                 quiz.setFechaFin(fechaFin);
                 quiz.setLiberado(esLiberado);
                 quiz.setUrlHojaRespuestas(urlHojaRespuesta);
+                quiz.setTemplateHojaRespuesta(templateHojaRespuesta);
                 quiz.setOrigen(origen);
                 List<Result> results = this.setResults(course,quiz,jsonResults);
                 quiz.setResults(results);
