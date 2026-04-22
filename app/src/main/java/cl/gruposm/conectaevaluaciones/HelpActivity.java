@@ -1,6 +1,9 @@
 package cl.gruposm.conectaevaluaciones;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -25,6 +28,7 @@ public class HelpActivity extends AppCompatActivity {
     private static final int MAX_STEP = 10;
     private SessionHelp sessionHelp;
     private ViewPager viewPager;
+    private View bottomAction;
     private MyViewPagerAdapter myViewPagerAdapter;
     private Button btnNext;
     private String about_title_array[] = {
@@ -73,8 +77,10 @@ public class HelpActivity extends AppCompatActivity {
     }
     private void initComponent() {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
+        bottomAction = findViewById(R.id.layoutBottomAction);
         btnNext = (Button) findViewById(R.id.btn_next);
         sessionHelp =  new SessionHelp(this);
+        applyNavigationBarInsets();
         // adding bottom dots
         bottomProgressDots(0);
 
@@ -156,6 +162,28 @@ public class HelpActivity extends AppCompatActivity {
 
         }
     };
+
+    private void applyNavigationBarInsets() {
+        final int initialPaddingLeft = bottomAction.getPaddingLeft();
+        final int initialPaddingTop = bottomAction.getPaddingTop();
+        final int initialPaddingRight = bottomAction.getPaddingRight();
+        final int initialPaddingBottom = bottomAction.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(bottomAction, (view, windowInsets) -> {
+            Insets navigationBars = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            Insets tappableElement = windowInsets.getInsets(WindowInsetsCompat.Type.tappableElement());
+            int bottomInset = Math.max(navigationBars.bottom, tappableElement.bottom);
+            view.setPadding(
+                    initialPaddingLeft,
+                    initialPaddingTop,
+                    initialPaddingRight,
+                    initialPaddingBottom + bottomInset
+            );
+            return windowInsets;
+        });
+
+        ViewCompat.requestApplyInsets(bottomAction);
+    }
     /**
      * View pager adapter
      */

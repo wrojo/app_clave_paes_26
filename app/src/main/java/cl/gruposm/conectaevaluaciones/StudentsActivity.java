@@ -3,6 +3,9 @@ package cl.gruposm.conectaevaluaciones;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -70,6 +74,7 @@ public class StudentsActivity extends AppCompatActivity {
     private TextView textStudents;
     private Button btnDownload;
     private Button btnUploadResult;
+    private View fabContainer;
     private SessionManager session;
     private ProgressDialog progressDownload;
     Course course;
@@ -100,11 +105,13 @@ public class StudentsActivity extends AppCompatActivity {
         session =  new SessionManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab_escanear);
+        fabContainer = findViewById(R.id.fab_container);
         textQuiz = (TextView) findViewById(R.id.textQuiz);
         textQuestions = (TextView) findViewById(R.id.textQuestions);
         textStudents = (TextView) findViewById(R.id.textStudents);
         btnDownload =  (Button) findViewById(R.id.btn_download);
         btnUploadResult =  (Button) findViewById(R.id.btnUploadResult);
+        applyNavigationBarInsets();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new LineItemDecoration(this, LinearLayout.VERTICAL));
         recyclerView.setHasFixedSize(true);
@@ -244,6 +251,36 @@ public class StudentsActivity extends AppCompatActivity {
         {
             Util.showCustomDialogError(this, getResources().getString(R.string.title_error_dialog_scan), getResources().getString(R.string.text_error_data_anwsers_scan));
         }
+    }
+
+    private void applyNavigationBarInsets() {
+        final View root = findViewById(R.id.lyt_parent);
+        final int recyclerPaddingLeft = recyclerView.getPaddingLeft();
+        final int recyclerPaddingTop = recyclerView.getPaddingTop();
+        final int recyclerPaddingRight = recyclerView.getPaddingRight();
+        final int recyclerPaddingBottom = recyclerView.getPaddingBottom();
+        final ViewGroup.MarginLayoutParams fabContainerLayoutParams =
+                (ViewGroup.MarginLayoutParams) fabContainer.getLayoutParams();
+        final int fabContainerBottomMargin = fabContainerLayoutParams.bottomMargin;
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsets) -> {
+            Insets navigationBars = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            Insets tappableElement = windowInsets.getInsets(WindowInsetsCompat.Type.tappableElement());
+            int bottomInset = Math.max(navigationBars.bottom, tappableElement.bottom);
+
+            fabContainerLayoutParams.bottomMargin = fabContainerBottomMargin + bottomInset;
+            fabContainer.setLayoutParams(fabContainerLayoutParams);
+
+            recyclerView.setPadding(
+                    recyclerPaddingLeft,
+                    recyclerPaddingTop,
+                    recyclerPaddingRight,
+                    recyclerPaddingBottom + bottomInset
+            );
+            return windowInsets;
+        });
+
+        ViewCompat.requestApplyInsets(root);
     }
 
     private void downloadSheet(final String ensayoId, final boolean isRetry) {

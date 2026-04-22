@@ -14,7 +14,7 @@ android {
         applicationId "cl.gruposm.conectaevaluaciones"
         minSdk 24
         targetSdk 35
-        versionCode 3
+        versionCode 5
         versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

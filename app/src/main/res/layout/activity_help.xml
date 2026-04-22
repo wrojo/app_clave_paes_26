@@ -39,6 +39,7 @@
         android:orientation="horizontal" />
 
     <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/layoutBottomAction"
         style="@style/RippleStyleBlack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

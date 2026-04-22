@@ -14,6 +14,9 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -26,6 +29,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -72,6 +76,7 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
     ImageView backGround;
     private Button btnAceptar;
     private Button btnCancelar;
+    private LinearLayout layoutBotones;
     private LinearLayout layoutTexto;
     private LinearLayout layoutMensaje;
     private TextView txtResultado;
@@ -102,6 +107,7 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
         this.layoutParent = findViewById(R.id.layoutParent);
         this.btnAceptar = (Button)this.findViewById(R.id.btnAceptar);
         this.btnCancelar = (Button)this.findViewById(R.id.btnCancelar);
+        this.layoutBotones = (LinearLayout)this.findViewById(R.id.layoutBotones);
         this.layoutTexto = (LinearLayout)this.findViewById(R.id.layoutTexto);
         this.layoutMensaje = (LinearLayout)this.findViewById(R.id.layoutMensaje);
         this.txtResultado = (TextView)this.findViewById(R.id.txtResultado);
@@ -199,6 +205,7 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
             }
         });
         initToolbar();
+        applyNavigationBarInsets();
     }
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -208,6 +215,24 @@ public class ScannerActivity extends AppCompatActivity implements ImageAnalysis.
         getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_scanner));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Tools.setSystemBarColor(this, R.color.paes_color_5);
+    }
+
+    private void applyNavigationBarInsets() {
+        final ViewGroup.MarginLayoutParams layoutBotonesLayoutParams =
+                (ViewGroup.MarginLayoutParams) layoutBotones.getLayoutParams();
+        final int initialBottomMargin = layoutBotonesLayoutParams.bottomMargin;
+        final View root = findViewById(R.id.layoutParent);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsets) -> {
+            Insets navigationBars = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            Insets tappableElement = windowInsets.getInsets(WindowInsetsCompat.Type.tappableElement());
+            int bottomInset = Math.max(navigationBars.bottom, tappableElement.bottom);
+            layoutBotonesLayoutParams.bottomMargin = initialBottomMargin + bottomInset;
+            layoutBotones.setLayoutParams(layoutBotonesLayoutParams);
+            return windowInsets;
+        });
+
+        ViewCompat.requestApplyInsets(root);
     }
 
     Executor getExecutor() {
