@@ -89,6 +89,13 @@ public class DetectionUtil {
     private static final int SHEET_2_ANSWER_DARK_MULTI_PIXEL_PERCENTAGE = 50;
     private static final int SHEET_2_ANSWER_DARK_MULTI_CENTER_PIXEL_PERCENTAGE = 52;
     private static final double SHEET_2_ANSWER_DARK_MULTI_MIN_RELATIVE_DELTA = 10.0;
+    private static final double SHEET_2_CORNER_MIN_AREA_RATIO = 0.006;
+    private static final double SHEET_2_CORNER_MAX_AREA_RATIO = 0.12;
+    private static final double SHEET_2_CORNER_MIN_SIDE_RATIO = 0.07;
+    private static final double SHEET_2_CORNER_MAX_SIDE_RATIO = 0.55;
+    private static final double SHEET_2_CORNER_MIN_INK_COVERAGE = 0.55;
+    private static final double SHEET_2_CORNER_MAX_MEAN_GRAY = 150.0;
+    private static final double SHEET_2_CORNER_MIN_EXPECTED_PROXIMITY = 0.22;
 
     private OmrUtil omrUtil;
     private Quiz quiz;
@@ -242,38 +249,6 @@ public class DetectionUtil {
             pointRightTop = this.findPointSheet2(edgeRoi2, 2, mapRect.get(2));
             pointLeftBottom = this.findPointSheet2(edgeRoi3, 3, mapRect.get(3));
             pointRightBottom = this.findPointSheet2(edgeRoi4, 4, mapRect.get(4));
-            Mat canny1 = omrUtil.applyCanny(rgb.clone().submat(mapRect.get(1)));
-            Mat canny2 = omrUtil.applyCanny(rgb.clone().submat(mapRect.get(2)));
-            Mat canny3 = omrUtil.applyCanny(rgb.clone().submat(mapRect.get(3)));
-            Mat canny4 = omrUtil.applyCanny(rgb.clone().submat(mapRect.get(4)));
-            if (pointLeftTop == null) {
-                pointLeftTop = this.findPoint(canny1, 1, mapRect.get(1));
-                if (pointLeftTop != null) {
-                    Log.d(TAG, "sheet2 fallback point_1 used");
-                }
-            }
-            if (pointRightTop == null) {
-                pointRightTop = this.findPoint(canny2, 2, mapRect.get(2));
-                if (pointRightTop != null) {
-                    Log.d(TAG, "sheet2 fallback point_2 used");
-                }
-            }
-            if (pointLeftBottom == null) {
-                pointLeftBottom = this.findPoint(canny3, 3, mapRect.get(3));
-                if (pointLeftBottom != null) {
-                    Log.d(TAG, "sheet2 fallback point_3 used");
-                }
-            }
-            if (pointRightBottom == null) {
-                pointRightBottom = this.findPoint(canny4, 4, mapRect.get(4));
-                if (pointRightBottom != null) {
-                    Log.d(TAG, "sheet2 fallback point_4 used");
-                }
-            }
-            canny1.release();
-            canny2.release();
-            canny3.release();
-            canny4.release();
         } else {
             Mat canny1 = omrUtil.applyCanny(rgb.clone().submat(mapRect.get(1)));
             Mat canny2 = omrUtil.applyCanny(rgb.clone().submat(mapRect.get(2)));
@@ -284,6 +259,10 @@ public class DetectionUtil {
             pointLeftBottom = this.findPoint(canny3,3,mapRect.get(3));
             pointRightBottom = this.findPoint(canny4, 4,mapRect.get(4));
         }
+        edgeRoi1.release();
+        edgeRoi2.release();
+        edgeRoi3.release();
+        edgeRoi4.release();
         Log.d("TAG", "point_1:" + pointLeftTop);
         Log.d("TAG", "point_2:" + pointRightTop);
         Log.d("TAG", "point_3:" + pointLeftBottom);
@@ -1067,15 +1046,17 @@ public class DetectionUtil {
         Imgproc.GaussianBlur(gray, gray, new Size(5, 5), 0);
         Mat binary = new Mat();
         Imgproc.threshold(gray, binary, 0, 255, Imgproc.THRESH_BINARY_INV + Imgproc.THRESH_OTSU);
-        Imgproc.morphologyEx(binary, binary, Imgproc.MORPH_OPEN, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3)));
+        Mat openKernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
+        Imgproc.morphologyEx(binary, binary, Imgproc.MORPH_OPEN, openKernel);
+        openKernel.release();
 
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat hierarchy = new Mat();
         Imgproc.findContours(binary, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
         double roiArea = (double) roi.cols() * (double) roi.rows();
-        double minArea = roiArea * 0.004;
-        double maxArea = roiArea * 0.20;
+        double minArea = roiArea * SHEET_2_CORNER_MIN_AREA_RATIO;
+        double maxArea = roiArea * SHEET_2_CORNER_MAX_AREA_RATIO;
         double maxDistance = Math.sqrt((double) (roi.cols() * roi.cols()) + (double) (roi.rows() * roi.rows()));
         double expectedX = (point == 2 || point == 4) ? roi.cols() : 0;
         double expectedY = (point == 3 || point == 4) ? roi.rows() : 0;
@@ -1092,20 +1073,52 @@ public class DetectionUtil {
             if (ratio < 0.75 || ratio > 1.30) {
                 continue;
             }
-            double contourArea = Imgproc.contourArea(contour);
-            double fillRatio = contourArea / area;
-            if (fillRatio < 0.35) {
+            double widthRatio = roi.cols() > 0 ? ((double) rect.width / (double) roi.cols()) : 0.0;
+            double heightRatio = roi.rows() > 0 ? ((double) rect.height / (double) roi.rows()) : 0.0;
+            if (widthRatio < SHEET_2_CORNER_MIN_SIDE_RATIO || widthRatio > SHEET_2_CORNER_MAX_SIDE_RATIO) {
+                continue;
+            }
+            if (heightRatio < SHEET_2_CORNER_MIN_SIDE_RATIO || heightRatio > SHEET_2_CORNER_MAX_SIDE_RATIO) {
                 continue;
             }
             double centerX = rect.x + (rect.width / 2.0);
             double centerY = rect.y + (rect.height / 2.0);
+            if (!isPointInExpectedSheet2RoiQuadrant(centerX, centerY, point, roi.cols(), roi.rows())) {
+                continue;
+            }
+            Mat binaryCandidate = binary.submat(rect);
+            double inkCoverage = area > 0 ? (Core.countNonZero(binaryCandidate) / area) : 0.0;
+            binaryCandidate.release();
+            if (inkCoverage < SHEET_2_CORNER_MIN_INK_COVERAGE) {
+                continue;
+            }
+            Mat grayCandidate = gray.submat(rect);
+            double meanGray = Core.mean(grayCandidate).val[0];
+            grayCandidate.release();
+            if (meanGray > SHEET_2_CORNER_MAX_MEAN_GRAY) {
+                continue;
+            }
+            double normalizedX = roi.cols() > 0 ? (centerX / (double) roi.cols()) : 0.0;
+            double normalizedY = roi.rows() > 0 ? (centerY / (double) roi.rows()) : 0.0;
+            double expectedNormalizedX = (point == 2 || point == 4) ? 1.0 : 0.0;
+            double expectedNormalizedY = (point == 3 || point == 4) ? 1.0 : 0.0;
+            double expectedProximity = 1.0
+                    - ((Math.abs(normalizedX - expectedNormalizedX) + Math.abs(normalizedY - expectedNormalizedY)) / 2.0);
+            if (expectedProximity < SHEET_2_CORNER_MIN_EXPECTED_PROXIMITY) {
+                continue;
+            }
             double distance = Math.sqrt(
                     ((centerX - expectedX) * (centerX - expectedX)) +
                     ((centerY - expectedY) * (centerY - expectedY))
             );
             double distanceFactor = maxDistance > 0 ? (distance / maxDistance) : 0;
             double areaFactor = roiArea > 0 ? (area / roiArea) : 0;
-            double score = areaFactor + (fillRatio * 0.15) - (distanceFactor * 0.45);
+            double darknessFactor = 1.0 - (meanGray / 255.0);
+            double score = (expectedProximity * 0.55)
+                    + (inkCoverage * 0.20)
+                    + (darknessFactor * 0.15)
+                    + (areaFactor * 0.15)
+                    - (distanceFactor * 0.20);
             if (score > bestScore) {
                 bestScore = score;
                 int posX = (int) Math.round(centerX) + contextRect.x;
@@ -1119,6 +1132,29 @@ public class DetectionUtil {
         binary.release();
         gray.release();
         return best;
+    }
+    private boolean isPointInExpectedSheet2RoiQuadrant(double centerX, double centerY, int point, int roiWidth, int roiHeight)
+    {
+        if (roiWidth <= 0 || roiHeight <= 0) {
+            return false;
+        }
+        double normalizedX = centerX / (double) roiWidth;
+        double normalizedY = centerY / (double) roiHeight;
+        double min = 0.30;
+        double max = 0.70;
+        if (point == 1) {
+            return normalizedX <= max && normalizedY <= max;
+        }
+        if (point == 2) {
+            return normalizedX >= min && normalizedY <= max;
+        }
+        if (point == 3) {
+            return normalizedX <= max && normalizedY >= min;
+        }
+        if (point == 4) {
+            return normalizedX >= min && normalizedY >= min;
+        }
+        return false;
     }
     private double distance(Point p1, Point p2)
     {

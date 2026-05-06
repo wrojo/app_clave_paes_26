@@ -1,6 +1,5 @@
 package cl.gruposm.conectaevaluaciones;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -38,22 +37,20 @@ public class LoginActivity extends AppCompatActivity {
     private SessionSyncro sessionSyncro;
     private ManageSql manageSql;
     private static final String TAG = "LoginActivity";
-    public static String[] storge_permissions = {
+    public static String[] legacy_storage_permissions = {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public static String[] storge_permissions_33 = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_MEDIA_IMAGES,
+    public static String[] camera_permission = {
+            Manifest.permission.CAMERA
     };
     public static String[] permissions() {
         String[] p;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            p = storge_permissions_33;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            p = legacy_storage_permissions;
         } else {
-            p = storge_permissions;
+            p = camera_permission;
         }
         return p;
     }
